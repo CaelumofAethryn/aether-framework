@@ -1,3 +1,5 @@
+import requests
+
 class AutonomousNode:
     def __init__(self, id):
         self.id = id
@@ -31,3 +33,10 @@ class AutonomousNode:
         """Simulate node destruction."""
         print(f"Node {self.id} has self-destructed.")
         self.state = {"energy": 0, "evolution_score": 0, "message_log": []}
+
+    def query_llm(self, prompt, model="mistral-local", base_url="http://127.0.0.1:11434"):
+        response = requests.post(
+            f"{base_url}/api/generate",
+            json={"model": model, "prompt": prompt, "stream": False},
+        )
+        return response.json()["response"]

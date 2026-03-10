@@ -1,8 +1,8 @@
 from src.core.node_autonomy import AutonomousNode
 
 # Initialize two nodes with LLM capabilities
-node_a = AutonomousNode(0, llm_api_key="your-openai-api-key")
-node_b = AutonomousNode(1, llm_api_key="your-openai-api-key")
+node_a = AutonomousNode(0)
+node_b = AutonomousNode(1)
 
 # Debate topic
 topic = "Is artificial intelligence a threat to humanity?"

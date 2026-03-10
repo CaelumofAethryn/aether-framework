@@ -1,7 +1,9 @@
 import json
+import random
+from src.modules.social_media_orchestrator import SocialMediaOrchestrator
 import queue
 import numpy as np
-from solana.keypair import Keypair
+
 from src.utils.llm_client import LLMClient
 from src.utils.multi_modal_handler import MultiModalHandler
 from src.swarm.swarm_consensus import SwarmConsensus
@@ -12,20 +14,6 @@ from src.utils.ipfs_client import IPFSClient
 from src.utils.agent_collaboration import CollaborationFramework
 from src.utils.reinforcement_learning import QLearning
 from src.democracy.proposal_manager import ProposalManager
-import random
-import queue
-import numpy as np
-from src.integrations.llm_client import LLMClient
-from src.integrations.multi_modal_handler import MultiModalHandler
-from src.integrations.swarm_consensus import SwarmConsensus
-from src.integrations.blockchain_manager import BlockchainManager
-from src.integrations.redis_task_queue import RedisTaskQueue
-from src.integrations.knowledge_graph import KnowledgeGraph
-from src.integrations.ipfs_client import IPFSClient
-from src.integrations.collaboration_framework import CollaborationFramework
-from src.integrations.q_learning import QLearning
-from src.integrations.proposal_manager import ProposalManager
-from src.integrations.social_media_orchestrator import SocialMediaOrchestrator
 from nacl.signing import SigningKey
 
 class AIAgent:
@@ -166,6 +154,11 @@ class AIAgent:
 
     def check_consensus(self):
         return self.consensus.get_consensus()
+
+    def delegate_task(self, recipient_id, task_description):
+        message = f"TASK DELEGATION: {task_description}"
+        self.collaboration.send_message(self.agent_id, recipient_id, message)
+        print(f"Agent {self.agent_id}: Delegated task to Agent {recipient_id} - {task_description}")
 
     # Collaboration
     def send_message(self, recipient_id, message):

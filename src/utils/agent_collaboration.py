@@ -5,8 +5,10 @@ import threading
 class CollaborationFramework:
     """Handles collaboration and messaging between agents."""
 
+    _shared_queue = queue.Queue()
+
     def __init__(self):
-        self.message_queue = queue.Queue()
+        self.message_queue = CollaborationFramework._shared_queue
 
     def send_message(self, sender_id, recipient_id, message):
         """Send a message to another agent."""
