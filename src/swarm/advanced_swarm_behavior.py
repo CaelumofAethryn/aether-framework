@@ -138,6 +138,17 @@ class Swarm:
                 node1, node2 = random.sample(active_nodes, 2)
                 node1.interact(node2)
 
+    def breed_agent(self, parent_agent, role="worker"):
+        new_id = len(self.nodes)
+        new_agent = SwarmNode(new_id, role=role)
+        new_agent.knowledge = parent_agent.knowledge.copy()
+        self.nodes.append(new_agent)
+        return new_agent
+
+    def list_agents(self):
+        for node in self.nodes:
+            print(f"Node {node.id} | Role: {node.role} | Energy: {node.energy} | Tasks: {node.tasks_completed}")
+
 
 # Example usage
 if __name__ == "__main__":
