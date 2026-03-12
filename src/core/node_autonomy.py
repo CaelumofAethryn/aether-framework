@@ -1,8 +1,12 @@
 import requests
 
 class AutonomousNode:
-    def __init__(self, id):
+    def __init__(self, id, llm_api_key=None, provider="ollama", base_url="http://127.0.0.1:11434", model="mistral-local:latest"):
         self.id = id
+        self.llm_api_key = llm_api_key
+        self.provider = provider
+        self.base_url = base_url
+        self.model = model
         self.state = {
             "energy": 100,
             "evolution_score": 0,
@@ -34,9 +38,23 @@ class AutonomousNode:
         print(f"Node {self.id} has self-destructed.")
         self.state = {"energy": 0, "evolution_score": 0, "message_log": []}
 
-    def query_llm(self, prompt, model="mistral-local", base_url="http://127.0.0.1:11434"):
-        response = requests.post(
-            f"{base_url}/api/generate",
-            json={"model": model, "prompt": prompt, "stream": False},
-        )
-        return response.json()["response"]
+    def query_llm(self, prompt):
+        try:
+            response = requests.post(
+                f"{self.base_url}/api/generate",
+                json={"model": self.model, "prompt": prompt, "stream": False},
+                timeout=120,
+            )
+
+            data = response.json()
+
+            if "response" in data:
+                return data["response"]
+
+            if "error" in data:
+                return f"LLM error: {data['error']}"
+
+            return f"Unexpected response: {data}"
+
+        except Exception as e:
+            return f"LLM request failed: {str(e)}"

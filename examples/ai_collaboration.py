@@ -3,7 +3,7 @@ from src.core.node_autonomy import AutonomousNode
 
 # Initialize the lattice and nodes
 lattice = LatticeEngine()
-nodes = [AutonomousNode(i, llm_api_key="your-openai-api-key") for i in range(3)]
+nodes = [AutonomousNode(i) for i in range(3)]
 for node in nodes:
     lattice.add_node(node)
 lattice.connect_nodes(nodes[0], nodes[1])

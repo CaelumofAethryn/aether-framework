@@ -74,7 +74,7 @@ class AIAgent:
         task = self.redis_queue.pop_task()
         if task:
             print(f"Agent {self.agent_id}: Processing task from queue - {task['task_description']}")
-            self.execute_text_task(task["task_description"])
+            self.execute_task(task["task_description"])
 
     # Blockchain methods
     def log_task_on_chain(self, task_description, task_result):
@@ -131,16 +131,26 @@ class AIAgent:
         self.rl_agent.decay_exploration()
 
     def execute_action(self, action):
-        if action == 0:
+        """Execute an RL-selected action and return a reward."""
+
+        if action == 0:  # Example action: Process next queued task
             self.pull_task_from_queue()
             return 1
-        elif action == 1:
+
+        elif action == 1:  # Example action: Store knowledge
             self.add_knowledge("New Task", {"status": "completed"})
             return 2
-        elif action == 2:
-            self.log_task_on_chain("Test Task", "Success")
+
+        elif action == 2:  # Example action: Log task outcome
+            try:
+                self.log_task_on_chain("Test Task", "Success")
+            except Exception:
+                print(f"Agent {self.agent_id}: Blockchain logging unavailable.")
             return 3
+
         return 0
+
+
 
     def get_environment_state(self):
         return np.random.randint(5)
@@ -154,6 +164,38 @@ class AIAgent:
 
     def check_consensus(self):
         return self.consensus.get_consensus()
+
+
+ # Local task management
+    def add_task(self, priority, task_description):
+        self.task_queue.put((priority, task_description))
+        print(f"Agent {self.agent_id}: Task added with priority {priority} - {task_description}")
+
+    def process_next_task(self):
+        if not self.task_queue.empty():
+            priority, task_description = self.task_queue.get()
+            print(f"Agent {self.agent_id}: Processing task with priority {priority} - {task_description}")
+            self.execute_text_task(task_description)
+        else:
+            print(f"Agent {self.agent_id}: No tasks in the queue.")
+
+    # Knowledge base management
+    def add_to_knowledge_base(self, task_description, result):
+        self.knowledge_base.append({"task": task_description, "result": result})
+
+    def save_knowledge_base(self, filename):
+        with open(filename, 'w') as f:
+            json.dump(self.knowledge_base, f)
+        print(f"Agent {self.agent_id}: Knowledge base saved to {filename}.")
+
+    def load_knowledge_base(self, filename):
+        try:
+            with open(filename, 'r') as f:
+                self.knowledge_base = json.load(f)
+            print(f"Agent {self.agent_id}: Knowledge base loaded from {filename}.")
+        except FileNotFoundError:
+            print(f"Agent {self.agent_id}: No existing knowledge base found at {filename}. Starting fresh.")
+
 
     def delegate_task(self, recipient_id, task_description):
         message = f"TASK DELEGATION: {task_description}"
