@@ -1,3 +1,4 @@
+from src.config.model_roles import get_model_for_role
 from src.utils.llm_client import LLMClient
 
 
@@ -9,8 +10,12 @@ class AutonomousNode:
         provider=None,
         base_url=None,
         model=None,
+        role="utility",
     ):
         self.id = id
+        self.role = role or "utility"
+        selected_model = model or get_model_for_role(self.role)
+
         self.state = {
             "energy": 100,
             "evolution_score": 0,
@@ -20,9 +25,8 @@ class AutonomousNode:
             provider=provider,
             base_url=base_url,
             api_key=llm_api_key,
-            model=model,
+            model=selected_model,
         )
-
     def evolve(self):
         """Simulate autonomous evolution."""
         if self.state["energy"] > 0:
