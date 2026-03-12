@@ -1,5 +1,5 @@
 from src.core.node_autonomy import AutonomousNode
-
+from src.utils.run_recorder import save_swarm_run
 
 def main():
     task = "Design a simple local-first AI assistant architecture for a small community hub."
@@ -66,6 +66,7 @@ def main():
     print()
 
     print("[resolved node assignments]")
+    roles = {}
     for node in [reasoning_node, analysis_node, utility_node]:
         print(
             f"node_id={node.id} | "
@@ -73,7 +74,30 @@ def main():
             f"provider={node.llm_client.provider} | "
             f"model={node.llm_client.model}"
         )
+        roles[node.role] = {
+            "provider": node.llm_client.provider,
+            "model": node.llm_client.model,
+        }
 
+    record = {
+        "task": task,
+        "first_draft": first_draft,
+        "critique": critique,
+        "revised_draft": revised_draft,
+        "summary": summary,
+        "roles": roles,
+        "metadata": {
+            "run_type": "iterative_cross_role",
+            "quality_score": None,
+            "human_validated": False,
+            "training_candidate": False,
+            "notes": "",
+        },
+    }
+
+    saved_path = save_swarm_run(record, prefix="iterative_cross_role")
+    print()
+    print(f"[saved run] {saved_path}")
 
 if __name__ == "__main__":
     main()
