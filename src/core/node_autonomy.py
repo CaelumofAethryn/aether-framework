@@ -6,9 +6,9 @@ class AutonomousNode:
         self,
         id,
         llm_api_key=None,
-        provider="ollama",
+        provider=None,
         base_url=None,
-        model="mistral-local:latest",
+        model=None,
     ):
         self.id = id
         self.state = {

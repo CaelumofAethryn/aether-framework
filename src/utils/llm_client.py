@@ -1,38 +1,23 @@
-import os
 import requests
 
+from src.config.aether_config import (
+    get_api_key,
+    get_base_url,
+    get_model,
+    get_provider,
+    get_timeout,
+)
 
 class LLMClient:
     """Simple backend-selectable LLM client."""
 
-    def __init__(self, provider="ollama", base_url=None, api_key=None, model=None, timeout=120):
-        self.provider = (provider or "ollama").lower()
-        self.base_url = base_url or self._default_base_url(self.provider)
-        self.api_key = api_key or os.getenv("OPENAI_API_KEY")
-        self.model = model or self._default_model(self.provider)
-        self.timeout = timeout
+    def __init__(self, provider=None, base_url=None, api_key=None, model=None, timeout=None):
+        self.provider = (provider or get_provider()).lower()
+        self.base_url = base_url or get_base_url(self.provider)
+        self.api_key = api_key or get_api_key()
+        self.model = model or get_model(self.provider)
+        self.timeout = timeout if timeout is not None else get_timeout()
 
-    def _default_base_url(self, provider):
-        if provider == "ollama":
-            return "http://127.0.0.1:11434"
-        if provider in {"ooba", "oobabooga", "text-generation-webui"}:
-            return "http://127.0.0.1:5000"
-        if provider in {"lmstudio", "openai-compatible"}:
-            return "http://127.0.0.1:1234"
-        if provider == "openai":
-            return "https://api.openai.com"
-        return "http://127.0.0.1:11434"
-
-    def _default_model(self, provider):
-        if provider == "ollama":
-            return "mistral-local:latest"
-        if provider in {"lmstudio", "openai-compatible"}:
-            return "local-model"
-        if provider in {"ooba", "oobabooga", "text-generation-webui"}:
-            return "default"
-        if provider == "openai":
-            return "gpt-4o-mini"
-        return "mistral-local:latest"
 
     def generate_text(self, prompt, model=None, temperature=0.7, max_tokens=512):
         return self.send_request(
