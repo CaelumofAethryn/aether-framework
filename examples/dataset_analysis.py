@@ -1,8 +1,7 @@
 from src.core.node_autonomy import AutonomousNode
 
 # Initialize nodes with LLM integration
-node = AutonomousNode(0, llm_api_key="your-openai-api-key")
-
+node = AutonomousNode(0)
 # Example dataset
 dataset = [
     "Climate change is accelerating.",
