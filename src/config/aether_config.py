@@ -12,7 +12,7 @@ DEFAULT_LMSTUDIO_MODEL = "local-model"
 DEFAULT_OOBA_MODEL = "default"
 DEFAULT_OPENAI_MODEL = "gpt-4o-mini"
 
-DEFAULT_TIMEOUT = 120
+DEFAULT_TIMEOUT = 300
 
 
 def get_provider():
