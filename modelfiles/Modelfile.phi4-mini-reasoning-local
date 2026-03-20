@@ -1,0 +1,2 @@
+FROM /home/caef/ollama-import/Phi-4-mini-reasoning-Q8_0.gguf
+PARAMETER num_ctx 4096
