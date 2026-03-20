@@ -6,3 +6,5 @@ kubo/
 .python-version
 .DS_Store
 
+data/
+applications/__pycache__/
