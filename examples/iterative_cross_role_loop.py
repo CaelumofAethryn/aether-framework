@@ -3,6 +3,7 @@ from src.utils.run_recorder import save_swarm_run
 
 def main():
     task = "Design a simple local-first AI assistant architecture for a small community hub."
+    workflow = "reasoning_analysis_revision_summary"
 
     reasoning_node = AutonomousNode(1, role="reasoning")
     analysis_node = AutonomousNode(2, role="analysis")
@@ -75,6 +76,7 @@ def main():
             f"model={node.llm_client.model}"
         )
         roles[node.role] = {
+            "node_id": node.id,
             "provider": node.llm_client.provider,
             "model": node.llm_client.model,
         }
@@ -88,6 +90,7 @@ def main():
         "roles": roles,
         "metadata": {
             "run_type": "iterative_cross_role",
+            "workflow": workflow,
             "quality_score": None,
             "human_validated": False,
             "training_candidate": False,
