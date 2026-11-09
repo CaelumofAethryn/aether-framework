@@ -16,6 +16,7 @@ TRAINING_CANDIDATES_DIR = LEARNING_DIR / "training_candidates"
 CURATED_DATASETS_DIR = LEARNING_DIR / "curated_datasets"
 ADAPTERS_DIR = LEARNING_DIR / "adapters"
 EVALS_DIR = LEARNING_DIR / "evals"
+WITNESS_REFLECTIONS_DIR = DATA_ROOT / "witness_reflections"
 
 IPFS_DIR = DATA_ROOT / "ipfs"
 IPFS_QUEUE_DIR = IPFS_DIR / "queue"
@@ -25,6 +26,7 @@ IPFS_MANIFESTS_DIR = IPFS_DIR / "manifests"
 def ensure_storage_dirs():
     paths = [
         DATA_ROOT,
+        WITNESS_REFLECTIONS_DIR,
         SWARM_RUNS_DIR,
         CORPUS_RAW_DIR,
         CORPUS_PROCESSED_DIR,

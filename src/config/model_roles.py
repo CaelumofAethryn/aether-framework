@@ -9,6 +9,7 @@ MODEL_ROLE_MAP = {
     "coding": "qwen2.5-coder-14b-local",
     "utility": "qwen2.5-coder-14b-local",
     "synthesis": "deepseek-r1-14b-q4-local",
+    "witness": "deepseek-r1-14b-q4-local",
 }
 
 def get_model_for_role(role):
